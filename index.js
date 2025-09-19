@@ -1,15 +1,58 @@
-// Step 1: Simulate User Behavior
-// - Add event listeners for button clicks and form submissions.
-// - Use JavaScript to dynamically update the DOM based on user actions.
+function addElementToDOM(id, text) {
+  const element = document.getElementById(id)
+  if (element) {
+    element.textContent = text
+  }
+}
 
-// Step 2: DOM Manipulation Functions
-// - Implement functions to add, update, and remove DOM elements.
-// - Ensure all elements are dynamically created with appropriate attributes and content.
+function removeElementFromDOM(id) {
+  const element = document.getElementById(id)
+  if (element) element.remove()
+}
 
-// Step 3: Error Handling
-// - Display error messages in the DOM for invalid inputs or missing elements.
-// - Create reusable functions to handle common error cases.
+function simulateClick(id, text) {
+  addElementToDOM(id, text)
+}
 
-// Step 4: Reusable Utilities
-// - Create modular utility functions, such as createElement(tag, attributes).
-// - Ensure all functions follow DRY principles for maintainability.
+function handleFormSubmit(formId, outputId) {
+  const form = document.getElementById(formId)
+  const input = form.querySelector("input")
+  const errorElement = document.getElementById("error-message")
+
+  if (!input.value.trim()) {
+    errorElement.textContent = "Input cannot be empty"
+    errorElement.classList.remove("hidden")
+    return
+  }
+
+  addElementToDOM(outputId, input.value)
+  errorElement.textContent = ""
+  errorElement.classList.add("hidden")
+  input.value = ""
+}
+
+// Export for Jest
+if (typeof module !== "undefined") {
+  module.exports = {
+    addElementToDOM,
+    removeElementFromDOM,
+    simulateClick,
+    handleFormSubmit,
+  }
+}
+
+// Event listeners can still use these functions
+const clickButton = document.getElementById("simulate-click")
+if (clickButton) {
+  clickButton.addEventListener("click", () => {
+    simulateClick("dynamic-content", "Button Clicked!")
+  })
+}
+
+const form = document.getElementById("user-form")
+if (form) {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault()
+    handleFormSubmit("user-form", "dynamic-content")
+  })
+}
